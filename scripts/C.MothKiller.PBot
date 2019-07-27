@@ -1,4 +1,4 @@
-// A MothKiller bot (copy of automation haven.automation)
+// A MothKiller bot (copy of haven.automation)
 
 const PBotAPI = Java.type("haven.purus.pbot.PBotAPI");
 const PBotInventory = Java.type("haven.purus.pbot.PBotInventory");
