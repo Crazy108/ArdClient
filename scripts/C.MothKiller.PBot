@@ -1,0 +1,27 @@
+// A MothKiller helper (copy of haven.automation)
+
+const PBotAPI = Java.type("haven.purus.pbot.PBotAPI");
+const PBotInventory = Java.type("haven.purus.pbot.PBotInventory");
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const Inventory = Java.type("haven.Inventory");
+
+main = () => {
+	for (inv = PBotAPI.gui.ui.root.lchild; inv != null; inv = inv.rnext()) {
+		if(!(inv instanceof Inventory)) continue;
+		let container = new PBotInventory(inv);
+
+		let items = container.getInventoryItemsByNames(["Dead Cock", "Silkworm Cocoon", "Death's Head Chrysalis"]);
+		if(items == null || items.size() == 0) continue;
+		PBotUtils.sysMsg("Found " + items.size() + " to kill.");
+		for (let item of items) {
+			item.activateItem();
+			PBotUtils.waitForFlowerMenu();
+			PBotUtils.choosePetal("Kill");
+			PBotUtils.closeFlowermenu();
+			PBotUtils.waitFlowermenuClose();
+		}
+	}
+	PBotUtils.sysMsg("Done!");
+}
+
+main();
