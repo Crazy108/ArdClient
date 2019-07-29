@@ -4,24 +4,45 @@ const PBotAPI = Java.type("haven.purus.pbot.PBotAPI");
 const PBotInventory = Java.type("haven.purus.pbot.PBotInventory");
 const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
 const Inventory = Java.type("haven.Inventory");
+const FlowerMenu = Java.type("haven.FlowerMenu");
 
 main = () => {
 	for (inv = PBotAPI.gui.ui.root.lchild; inv != null; inv = inv.rnext()) {
 		if(!(inv instanceof Inventory)) continue;
 		let container = new PBotInventory(inv);
 
-		let items = container.getInventoryItemsByNames(["Dead Cock", "Silkworm Cocoon", "Death's Head Chrysalis"]);
+		let items = container.getInventoryItemsByNames(["Silkworm Cocoon", "Death's Head Chrysalis"]);
 		if(items == null || items.size() == 0) continue;
 		PBotUtils.sysMsg("Found " + items.size() + " to kill.");
 		for (let item of items) {
+
 			item.activateItem();
-			PBotUtils.waitForFlowerMenu();
+			PBotUtils.sleep(15);
+			PBotUtils.sysMsg("Quality: " + item.getQuality());
+
+			waitForFlowerMenuTimeout(350);
+
 			PBotUtils.choosePetal("Kill");
+			PBotUtils.sleep(15);
 			PBotUtils.closeFlowermenu();
-			PBotUtils.waitFlowermenuClose();
+			PBotUtils.sleep(15);
 		}
 	}
 	PBotUtils.sysMsg("Done!");
 }
 
 main();
+
+
+function waitForFlowerMenuTimeout(timeout=2000) {
+	let wait = 0
+	let pause = 50;
+	PBotUtils.sleep(pause);
+	wait += pause;
+	do {
+		if(PBotAPI.gui.ui.root.findchild(FlowerMenu) !== null) return;
+		wait += pause;
+		PBotUtils.sleep(pause);
+
+	} while (wait < timeout)
+}
